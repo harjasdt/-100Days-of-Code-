@@ -11,3 +11,4 @@ q=QuizBrain(bank)
 while q.still_has_question():
     q.next_question()
 q.result()
+
