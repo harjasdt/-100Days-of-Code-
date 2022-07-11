@@ -1,8 +1,6 @@
-from json import JSONDecodeError
 from tkinter import *
 from tkinter import messagebox
 import random
-import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def gen():
@@ -24,53 +22,16 @@ def gen():
     user3.delete(0, "end")
     user3.insert(0,passw)
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-def addition() :
-    new_data = {
-        user1.get() : {
-            "email": user2.get(),
-            "password" :user3.get(),
-        },
-    }
+def addition():
     if user1.get()=="" or user2.get()=="" or user3.get()=="":
         messagebox.showerror(title="OOPS!!!", message="DO NOT LEAVE ANY FIELD EMPTY")
     else:
-        try:
-            with open("data.json", "r") as data:
-                # loading existing data
-                x = json.load(data)
-
-                # updating data
-                x.update(new_data)
-            with open("data.json", "w") as data:
-                # adding data
-                json.dump(x, data, indent=4)
+        flag=messagebox.askokcancel(title="Success", message="DATA ADDED")
+        if flag:
+            with open("data.txt", "a") as data:
+                data.write(f'{user1.get()} | {user2.get()} | {user3.get()}\n')
                 user1.delete(0, "end")
                 user3.delete(0, "end")
-        except :
-            with open("data.json", "w") as data:
-                # adding data
-                json.dump(new_data, data, indent=4)
-                user1.delete(0, "end")
-                user3.delete(0, "end")
-
-
-
-def search():
-    try:
-        with open("data.json", "r") as data:
-            # loading existing data
-            x = json.load(data)
-            found=False
-            for key in x:
-                if key.lower()==user1.get().lower():
-                    messagebox.showinfo(title=f'{key}', message=f'{x[key]}')
-                    found=TRUE
-            if not found:
-                messagebox.showerror(title="OOPS!!!", message="No ENTRIES FOUND")
-    except JSONDecodeError:
-        messagebox.showerror(title="OOPS!!!", message="0 ENTRIES PRESENT")
-
-
 # ---------------------------- UI SETUP ------------------------------- #
 window=Tk()
 window.title("Password Manager")
@@ -83,17 +44,14 @@ canvas.grid(row=0, column=1)
 l1=Label(text="Website")
 l1.grid(row=1, column=0)
 
-user1=Entry()
-user1.grid(row=1, column=1)
+user1=Entry(width=35)
+user1.grid(row=1, column=1, columnspan=2)
 user1.focus()
-
-bf=Button(text="Search", command=search)
-bf.grid(row=1, column=2)
 
 l2=Label(text="Email/username")
 l2.grid(row=2, column=0)
 
-user2=Entry(width=30)
+user2=Entry(width=35)
 user2.grid(row=2, column=1, columnspan=2)
 user2.insert(0, "s@mail")
 
